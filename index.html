@@ -1,49 +1,74 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+
 <body>
-	<textarea id="printContent"></textarea>
-	<input type="submit" onclick="connectAndPrint()" value="Print"/>
-	<P>Type text into box and click on submit button.
-	<script>
-	var device;
-
-	function setup(device) {
-		return device.open()
-		.then(() => device.selectConfiguration(1))
-		.then(() => device.claimInterface(0))
-	}
-
-	function print() {
-		var string = document.getElementById("printContent").value + "\n";
-		var encoder = new TextEncoder();
-		var data = encoder.encode(string);
-		device.transferOut(1, data)
-		.catch(error => { console.log(error); })
-	}
-
-	function connectAndPrint() {
-		if (device == null) {
-			navigator.usb.requestDevice({ filters: [{ vendorId: 1046 }] })
-			.then(selectedDevice => {
-				device = selectedDevice;
-				console.log(device);
-				return setup(device);
-			})
-			.then(() => print())
-			.catch(error => { console.log(error); })
-		}
-		else
-			print();
-	}
-
-	navigator.usb.getDevices()
-	.then(devices => {
-		if (devices.length > 0) {
-			device = devices[0];
-			return setup(device);
-		}
-	})
-	.catch(error => { console.log(error); });
-
-	</script>
+    <div class="retro-container scanline-effect old-crt-monitor ">
+        <header>
+            <h1>PW</h1>
+            <nav role="navigation">
+                <ul>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="projects.html">PROJECTS</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section id="screen-1">
+                <article>
+                    <div>
+                        <header>
+                            <h2>Hi, Welcome to my profile</h2>
+                        </header>
+                        <div class="content">
+                            As a dedicated and results-oriented professional, I bring a wealth of experience in software
+                            engineering. Over the past five years, I have developed my skills in web and mobile development,
+                            contributing to the growth and success of projects I have contributed to or developed on my own.
+    
+                            My career journey has equipped me with a comprehensive understanding of relevant industry
+                            knowledge, allowing me to effectively navigate and adapt to the ever-evolving landscape of
+                            software engineering. I am passionate about leveraging innovative solutions and strategic
+                            thinking to drive business performance and achieve outstanding results.
+    
+                            Feel free to reach out if you’d like to connect, discuss industry trends, or explore potential
+                            partnerships. Let’s connect and grow together!
+                        </div>
+                        <div>
+                            <p>Email: pwambua25@gmail.com</p>
+                        </div>
+                    </div>
+                    <figure>
+                        <img  src="./prof.jpeg" alt="alt text for illustration">
+                    </figure>
+                </article>
+            </section>
+        </main>
+        <footer>
+            
+            <a href="https://github.com/peterwambua-1998" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffd52c" fill="none">
+                    <path d="M6.51734 17.1132C6.91177 17.6905 8.10883 18.9228 9.74168 19.2333M9.86428 22C8.83582 21.8306 2 19.6057 2 12.0926C2 5.06329 8.0019 2 12.0008 2C15.9996 2 22 5.06329 22 12.0926C22 19.6057 15.1642 21.8306 14.1357 22C14.1357 22 13.9267 18.5826 14.0487 17.9969C14.1706 17.4113 13.7552 16.4688 13.7552 16.4688C14.7262 16.1055 16.2043 15.5847 16.7001 14.1874C17.0848 13.1032 17.3268 11.5288 16.2508 10.0489C16.2508 10.0489 16.5318 7.65809 15.9996 7.56548C15.4675 7.47287 13.8998 8.51192 13.8998 8.51192C13.4432 8.38248 12.4243 8.13476 12.0018 8.17939C11.5792 8.13476 10.5568 8.38248 10.1002 8.51192C10.1002 8.51192 8.53249 7.47287 8.00036 7.56548C7.46823 7.65809 7.74917 10.0489 7.74917 10.0489C6.67316 11.5288 6.91516 13.1032 7.2999 14.1874C7.79575 15.5847 9.27384 16.1055 10.2448 16.4688C10.2448 16.4688 9.82944 17.4113 9.95135 17.9969C10.0733 18.5826 9.86428 22 9.86428 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </a>
+            <a href="www.linkedin.com/in/peter-wambua-98b388219" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffd52c" fill="none">
+                    <path d="M7 10V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11 13V17M11 13C11 11.3431 12.3431 10 14 10C15.6569 10 17 11.3431 17 13V17M11 13V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M7.00801 7L6.99902 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                </svg>
+            </a>
+        </footer>
+    </div>
 </body>
+
 </html>
