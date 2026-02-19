@@ -1,392 +1,738 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - Peter Wambua</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Peter Wambua</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
 
-    <style>
-        /* ── Responsive overrides for projects.html ── */
+  <style>
+    /* ── Tokens ── */
+    :root {
+      --bg:       #0a0a0a;
+      --bg2:      #111111;
+      --surface:  #161616;
+      --border:   #2a2a2a;
+      --accent:   #e8ff47;
+      --accent2:  #ff4d4d;
+      --text:     #f0ede6;
+      --muted:    #5a5a5a;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-serif:   'DM Serif Display', serif;
+      --font-mono:    'JetBrains Mono', monospace;
+    }
 
-        /* Header: wrap nav on small screens */
-        header {
-            flex-wrap: wrap;
-            padding: 0.5rem;
-        }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
 
-        nav ul {
-            flex-wrap: wrap;
-            gap: clamp(0.75rem, 3vw, 40px);
-        }
+    /* ── Cursor ── */
+    #cursor { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; mix-blend-mode: difference; }
+    #cursor-dot {
+      width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
+      position: absolute; transform: translate(-50%,-50%);
+      transition: width .2s, height .2s;
+    }
+    #cursor-ring {
+      width: 36px; height: 36px; border: 1.5px solid var(--accent); border-radius: 50%;
+      position: absolute; transform: translate(-50%,-50%);
+      transition: width .2s, height .2s, opacity .2s; opacity: .6;
+    }
 
-        /* Section heading inside main */
-        #projects-screen>header {
-            border: none;
-            margin-bottom: 1rem;
-        }
+    /* ── Noise overlay ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 9000; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      background-size: 200px 200px; opacity: .4;
+    }
 
-        #projects-screen>header h2 {
-            font-size: clamp(1rem, 3.5vw, 1.6rem);
-            white-space: normal;
-            /* allow wrapping on very small screens */
-            word-break: break-word;
-        }
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 3rem;
+      border-bottom: 1px solid transparent;
+      transition: border-color .4s, background .4s, backdrop-filter .4s;
+    }
+    nav.scrolled { border-color: var(--border); background: rgba(10,10,10,.85); backdrop-filter: blur(16px); }
+    .nav-logo { font-family: var(--font-display); font-size: 1.8rem; letter-spacing: .05em; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; position: relative; transition: color .2s;
+    }
+    .nav-links a::after { content: ''; position: absolute; left: 0; bottom: -3px; width: 0; height: 1px; background: var(--accent); transition: width .3s cubic-bezier(.16,1,.3,1); }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-links a.active { color: var(--text); }
+    .nav-cta {
+      font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+      padding: .6rem 1.4rem; border: 1px solid var(--border);
+      color: var(--text); background: transparent; text-decoration: none;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .nav-cta:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 
-        /* Carousel: taller on mobile for better visibility */
-        .carousel-slide {
-            height: clamp(200px, 45vw, 350px);
-        }
+    /* ── Page hero ── */
+    .page-hero {
+      min-height: 44vh;
+      padding: 10rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .page-hero-bg {
+      position: absolute;
+      right: -0.04em; bottom: -0.12em;
+      font-family: var(--font-display);
+      font-size: clamp(160px, 22vw, 360px);
+      color: transparent;
+      -webkit-text-stroke: 1px var(--border);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+    .page-label {
+      font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.2rem; z-index: 1;
+      display: flex; align-items: center; gap: .75rem;
+      opacity: 0; transform: translateY(16px);
+      animation: fadeUp .7s .1s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .page-label::before { content: ''; width: 20px; height: 1px; background: var(--accent); display: block; }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: clamp(64px, 10vw, 150px);
+      line-height: .88;
+      letter-spacing: -.01em;
+      color: var(--text);
+      z-index: 1;
+      opacity: 0; transform: translateY(30px);
+      animation: fadeUp .85s .22s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .page-title em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: var(--muted);
+    }
+    .page-meta {
+      margin-top: 1.5rem; z-index: 1;
+      display: flex; align-items: center; gap: 2rem;
+      opacity: 0; animation: fadeIn .8s .5s ease forwards;
+    }
+    .page-count {
+      font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted);
+    }
+    .page-count span { color: var(--accent); }
 
-        @media (min-width: 768px) {
-            header {
-                padding: 0.5rem 1rem;
-            }
+    /* ── Filter bar ── */
+    .filter-bar {
+      padding: 1.2rem 3rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+      position: sticky; top: 73px; z-index: 500;
+      background: rgba(10,10,10,.92);
+      backdrop-filter: blur(12px);
+    }
+    .filter-btn {
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+      padding: .45rem 1rem;
+      border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      cursor: pointer; transition: all .2s;
+    }
+    .filter-btn:hover { border-color: var(--text); color: var(--text); }
+    .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(232,255,71,.07); }
 
-            .carousel-slide {
-                height: 450px;
-            }
-        }
+    /* ── Projects grid ── */
+    .projects-grid {
+      padding: 4rem 3rem 6rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
 
-        /* Project tags: already flex-wrap in style.css — just ensure font scales */
-        .tag {
-            font-size: clamp(0.7rem, 2vw, 0.9rem);
-        }
+    /* ── Project card ── */
+    .project-card {
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: background .25s;
+    }
+    .project-card:hover { background: var(--surface); }
 
-        /* Project title */
-        .project-title {
-            font-size: clamp(1.1rem, 3.5vw, 1.6rem);
-        }
+    /* Featured card spans full width */
+    .project-card.featured { grid-column: 1 / -1; }
 
-        /* Feature & tech headings */
-        .feature-heading,
-        .tech-heading {
-            font-size: clamp(1rem, 2.5vw, 1.3rem);
-        }
+    /* Image container */
+    .card-media {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .project-card.featured .card-media { height: 460px; }
+    .project-card:not(.featured) .card-media { height: 280px; }
 
-        /* Description text */
-        .project-description p,
-        .feature-list li,
-        .tech-stack {
-            font-size: clamp(0.95rem, 2vw, 1.15rem);
-        }
+    .card-media img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(30%) contrast(1.08);
+      transition: transform .7s cubic-bezier(.16,1,.3,1), filter .5s ease;
+      display: block;
+    }
+    .project-card:hover .card-media img {
+      transform: scale(1.04);
+      filter: grayscale(0%) contrast(1.05);
+    }
 
-        /* Project links: ensure buttons don't overflow */
-        .project-links {
-            flex-wrap: wrap;
-        }
+    /* Overlay on hover */
+    .card-media::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,.9) 0%, rgba(10,10,10,.2) 60%, transparent 100%);
+      opacity: 1;
+      transition: opacity .4s;
+    }
 
-        /* Carousel nav buttons: easier to tap on mobile */
-        .carousel-prev,
-        .carousel-next {
-            padding: 0.4rem 0.8rem;
-            font-size: clamp(0.9rem, 2vw, 1rem);
-        }
-    </style>
+    /* Slide numbers in media */
+    .card-slide-indicator {
+      position: absolute; bottom: 1rem; right: 1rem;
+      z-index: 2;
+      display: flex; gap: 5px;
+    }
+    .slide-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      transition: background .2s;
+    }
+    .slide-dot.active { background: var(--accent); }
+
+    /* Carousel controls */
+    .card-prev, .card-next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      z-index: 3;
+      background: rgba(10,10,10,.7);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 1rem;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity .2s, background .2s;
+      backdrop-filter: blur(8px);
+    }
+    .card-prev { left: 1rem; }
+    .card-next { right: 1rem; }
+    .project-card:hover .card-prev,
+    .project-card:hover .card-next { opacity: 1; }
+    .card-prev:hover, .card-next:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+    /* Card body */
+    .card-body {
+      padding: 1.8rem 2rem 2rem;
+      display: flex; flex-direction: column; flex: 1;
+    }
+    .project-card.featured .card-body { padding: 2.2rem 2.5rem 2.5rem; }
+
+    .card-top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .card-num {
+      font-family: var(--font-display);
+      font-size: 1rem; color: var(--muted);
+      line-height: 1;
+    }
+    .card-tags { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .card-tag {
+      font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+      padding: .2rem .55rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .card-tag.featured-tag { border-color: var(--accent); color: var(--accent); }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      letter-spacing: .03em;
+      line-height: .95;
+      color: var(--text);
+      margin-bottom: .9rem;
+    }
+    .project-card.featured .card-title { font-size: clamp(2rem, 4vw, 3.4rem); }
+
+    .card-desc {
+      font-size: 12px; color: var(--muted); line-height: 1.8;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .project-card.featured .card-desc { -webkit-line-clamp: 4; }
+
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 1.5rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--border);
+    }
+    .card-stack {
+      font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .card-links { display: flex; gap: .6rem; }
+    .card-link {
+      font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+      padding: .45rem .9rem;
+      border: 1px solid var(--border);
+      color: var(--text); text-decoration: none;
+      transition: background .2s, border-color .2s, color .2s;
+      display: inline-flex; align-items: center; gap: .3rem;
+    }
+    .card-link:hover { border-color: var(--accent); color: var(--accent); }
+    .card-link.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    .card-link.primary:hover { background: transparent; color: var(--accent); }
+
+    /* ── Full-width feature strip (after card grid) ── */
+    .skills-strip {
+      border-top: 1px solid var(--border);
+      padding: 5rem 3rem;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .strip-label { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: .8rem; display: flex; align-items: center; gap: .6rem; }
+    .strip-label::before { content: ''; width: 16px; height: 1px; background: var(--accent); }
+    .strip-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: .92;
+      color: var(--text);
+    }
+    .strip-heading em { font-family: var(--font-serif); font-style: italic; color: var(--muted); }
+    .strip-right { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+    .strip-item { background: var(--bg); padding: 1.8rem 1.5rem; transition: background .2s; }
+    .strip-item:hover { background: var(--surface); }
+    .strip-item-title { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: .05em; color: var(--text); margin-bottom: .5rem; }
+    .strip-item-body { font-size: 11px; color: var(--muted); line-height: 1.8; }
+
+    /* ── CTA strip ── */
+    .cta-strip {
+      border-top: 1px solid var(--border);
+      padding: 5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cta-strip-text {}
+    .cta-strip-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      line-height: .9;
+      color: var(--text);
+    }
+    .cta-strip-heading em { font-family: var(--font-serif); font-style: italic; color: var(--accent); }
+    .cta-strip-sub {
+      font-size: 12px; color: var(--muted); margin-top: 1rem; max-width: 380px; line-height: 1.8;
+    }
+    .cta-strip-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .9rem 2rem; background: var(--accent); color: var(--bg);
+      font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+      letter-spacing: .15em; text-transform: uppercase; text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(232,255,71,.25); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .9rem 2rem; background: transparent; color: var(--text);
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: .15em; text-transform: uppercase; text-decoration: none;
+      border: 1px solid var(--border); transition: border-color .2s, color .2s;
+    }
+    .btn-secondary:hover { border-color: var(--text); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-copy { font-size: 11px; letter-spacing: .1em; color: var(--muted); }
+    .footer-socials { display: flex; gap: 1.5rem; }
+    .footer-socials a {
+      font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+    .footer-socials a:hover { color: var(--accent); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: .1s; }
+    .reveal-d2 { transition-delay: .2s; }
+    .reveal-d3 { transition-delay: .3s; }
+
+    /* hidden via filter */
+    .project-card[data-hidden="true"] {
+      display: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .page-hero { padding: 8rem 1.5rem 3rem; }
+      .filter-bar { padding: 1rem 1.5rem; top: 65px; }
+      .projects-grid { grid-template-columns: 1fr; padding: 2rem 1.5rem 4rem; }
+      .project-card.featured { grid-column: 1; }
+      .project-card.featured .card-media { height: 260px; }
+      .project-card:not(.featured) .card-media { height: 220px; }
+      .skills-strip { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 2rem; }
+      .strip-right { grid-template-columns: 1fr; }
+      .cta-strip { flex-direction: column; gap: 2.5rem; padding: 3rem 1.5rem; align-items: flex-start; }
+      footer { flex-direction: column; gap: 1rem; padding: 2rem 1.5rem; }
+    }
+  </style>
 </head>
-
 <body>
-    <div class="retro-container scanline-effect old-crt-monitor">
-        <header>
-            <h1>PW</h1>
-            <nav role="navigation">
-                <ul>
-                    <li><a href="index.html">HOME</a></li>
-                    <li><a href="projects.html">PROJECTS</a></li>
-                    <li><a href="certifications.html">CERTIFICATIONS</a></li>
-                    <li><a href="contact.html">CONTACT</a></li>
-                </ul>
-            </nav>
-        </header>
 
-        <main>
-            <section id="projects-screen">
-                <header>
-                    <h2>> SYSTEM.EXECUTE(PROJECTS.EXE)_</h2>
-                </header>
+  <!-- Cursor -->
+  <div id="cursor">
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+  </div>
 
-                <!-- AI Chatbot Builder Project -->
-                <article class="project-card">
-                    <div class="project-header">
-                        <h3 class="project-title">AI Agent Builder Platform | React (TypeScript) · NestJS · LangGraph
-                        </h3>
-                        <div class="project-tags">
-                            <span class="tag">REACT</span>
-                            <span class="tag">REACT FLOW</span>
-                            <span class="tag">LANGCHAIN</span>
-                            <span class="tag">RAG</span>
-                            <span class="tag">NODE.JS</span>
-                            <span class="tag">AWS S3</span>
-                            <span class="tag">POSTGRES (vector extension for storing embeddings)</span>
-                            <span class="tag">Passport for authentication</span>
-                            <span class="tag">Stripe , Paystack and PayPal</span>
-                        </div>
-                    </div>
+  <!-- Nav -->
+  <nav id="nav">
+    <a href="index.html" class="nav-logo">P<span>W</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="projects.html" class="active">Projects</a></li>
+      <li><a href="certifications.html">Certifications</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="cv-peter.pdf" class="nav-cta" target="_blank">Resume ↗</a>
+  </nav>
 
-                    <div class="project-content">
-                        <div class="project-carousel">
-                            <div class="carousel-container">
-                                <div class="carousel-track">
-                                    <div class="carousel-slide"><img src="./assets/agent/one.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/agent/two.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/agent/three.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/agent/four.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/agent/five.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/agent/six.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/agent/seven.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/agent/eight.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/agent/nine.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                </div>
-                                <div class="carousel-nav">
-                                    <button class="carousel-prev">◀</button>
-                                    <div class="carousel-indicators">
-                                        <button class="indicator active" data-index="0"></button>
-                                        <button class="indicator" data-index="1"></button>
-                                        <button class="indicator" data-index="2"></button>
-                                        <button class="indicator" data-index="3"></button>
-                                        <button class="indicator" data-index="4"></button>
-                                        <button class="indicator" data-index="5"></button>
-                                        <button class="indicator" data-index="6"></button>
-                                        <button class="indicator" data-index="7"></button>
-                                        <button class="indicator" data-index="8"></button>
-                                    </div>
-                                    <button class="carousel-next">▶</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="project-info">
-                            <div class="project-description">
-                                <p>
-                                    A full-stack platform that enables users to design, configure, and deploy custom AI
-                                    agents for business automation tasks including sales operations, lead generation,
-                                    and customer support.
-
-                                    Built a React/TypeScript frontend with a NestJS backend structured as a monorepo,
-                                    integrating LangGraph for orchestrating multi-step agentic workflows.
-                                    The system supports voice/call recording capabilities and social media interactions,
-                                    with a modular architecture that allows agents to be composed and extended for
-                                    diverse use cases.
-
-                                </p>
-
-                                <h4 class="feature-heading">KEY FEATURES:</h4>
-                                <ul class="feature-list">
-                                    <li>Visual flow builder for creating complex conversation paths</li>
-                                    <li>AI RAG (Retrieval Augmented Generation) capability</li>
-                                    <li>Knowledge base integration via document upload, direct text input, or website
-                                        crawling</li>
-                                    <li>Image processing and recognition</li>
-                                    <li>Embeddable widget for easy website integration</li>
-                                    <li>Integrate bot with WhatsApp, Instagram and Facebook</li>
-                                    <li>Conversation management</li>
-                                </ul>
-
-                                <h4 class="tech-heading">TECH STACK:</h4>
-                                <p class="tech-stack">React, React Flow, Node.js, Langchain, Postgres, Pg-vector, AWS S3
-                                </p>
-                            </div>
-
-                            <div class="project-links">
-                                <a href="https://dev.kodensolutions.com/" class="retro-button" target="_blank">
-                                    <span class="button-text">LIVE DEMO</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="project-card">
-                    <div class="project-header">
-                        <h3 class="project-title">Real-Time Collaborative Note App</h3>
-                        <div class="project-tags">
-                            <span class="tag">REACT</span>
-                            <span class="tag">Yjs (CRDT)</span>
-                            <span class="tag">Tiptap rich editor</span>
-                            <span class="tag">Socket.io for real-time sync</span>
-                            <span class="tag">Express JS</span>
-                        </div>
-                    </div>
-
-                    <div class="project-content">
-                        <div class="project-carousel">
-                            <div class="carousel-container">
-                                <div class="carousel-track">
-                                    <div class="carousel-slide"><img src="./assets/note-app/one.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/note-app/two.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/note-app/three.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/note-app/four.png"
-                                            alt="AI Agent Builder Dashboard"></div>
-
-                                </div>
-                                <div class="carousel-nav">
-                                    <button class="carousel-prev">◀</button>
-                                    <div class="carousel-indicators">
-                                        <button class="indicator active" data-index="0"></button>
-                                        <button class="indicator" data-index="1"></button>
-                                        <button class="indicator" data-index="2"></button>
-                                        <button class="indicator" data-index="3"></button>
-
-                                    </div>
-                                    <button class="carousel-next">▶</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="project-info">
-                            <div class="project-description">
-                                <p>
-                                    A real-time collaborative note-taking web application where multiple users can edit
-                                    the same note simultaneously with instant updates across clients. It demonstrates
-                                    modern frontend and backend engineering skills, real-time communication, and
-                                    collaborative UI features.
-
-                                </p>
-
-                                <h4 class="feature-heading">KEY FEATURES:</h4>
-                                <ul class="feature-list">
-                                    <li>real-time collaborative editing</li>
-                                    <li>instant synchronization across clients</li>
-                                    <li>user presence indicators</li>
-                                    <li>conflict resolution mechanisms</li>
-                                </ul>
-
-                                <h4 class="tech-heading">TECH STACK:</h4>
-                                <p class="tech-stack">React with TypeScript, Vite, Yjs (CRDT), Socket.io, Node js,
-                                    Express Js, Vercel</p>
-                            </div>
-
-                            <div class="project-links">
-                                <a href="https://frontend-note-collab.vercel.app/" class="retro-button" target="_blank">
-                                    <span class="button-text">LIVE DEMO</span>
-                                </a>
-                                <a href="https://github.com/peterwambua-1998/note-collab-frontend" class="retro-button"
-                                    target="_blank">
-                                    <span class="button-text">Github repo frontend</span>
-                                </a>
-                                <a href="https://github.com/peterwambua-1998/note-collab-backend" class="retro-button"
-                                    target="_blank">
-                                    <span class="button-text">Github repo backend</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="project-card">
-                    <div class="project-header">
-                        <h3 class="project-title">Netflix Clone Web App</h3>
-                        <div class="project-tags">
-                            <span class="tag">REACT</span>
-                            <span class="tag">TMDB API</span>
-                            <span class="tag">Express JS</span>
-                        </div>
-                    </div>
-
-                    <div class="project-content">
-                        <div class="project-carousel">
-                            <div class="carousel-container">
-                                <div class="carousel-track">
-                                    <div class="carousel-slide"><img src="./assets/netflix/one.png"
-                                            alt="Netflix Clone Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/netflix/two.png"
-                                            alt="Netflix Clone Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/netflix/three.png"
-                                            alt="Netflix Clone   Dashboard"></div>
-                                    <div class="carousel-slide"><img src="./assets/netflix/four.png"
-                                            alt="Netflix Clone Dashboard"></div>
-
-                                </div>
-                                <div class="carousel-nav">
-                                    <button class="carousel-prev">◀</button>
-                                    <div class="carousel-indicators">
-                                        <button class="indicator active" data-index="0"></button>
-                                        <button class="indicator" data-index="1"></button>
-                                        <button class="indicator" data-index="2"></button>
-                                        <button class="indicator" data-index="3"></button>
-
-                                    </div>
-                                    <button class="carousel-next">▶</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="project-info">
-                            <div class="project-description">
-                                <p>
-                                   A full-stack streaming platform clone inspired by Netflix. The backend serves movie and TV show data through REST APIs, interacts with TMDB (The Movie Database) for media content, and the frontend displays browseable lists, search, and details using a Tailwind CSS.
-
-
-                                </p>
-
-
-                                <h4 class="tech-heading">TECH STACK:</h4>
-                                <p class="tech-stack">React with TypeScript, Vite, Tailwind CSS, Node js,
-                                    Express Js, Shadcn UI, TMDB API</p>
-                            </div>
-
-                            <div class="project-links">
-                                <a href="https://streamflix-frontend-liart.vercel.app/" class="retro-button" target="_blank">
-                                    <span class="button-text">LIVE DEMO</span>
-                                </a>
-                                <a href="https://github.com/peterwambua-1998/netflix-clone-frontend" class="retro-button"
-                                    target="_blank">
-                                    <span class="button-text">Github repo frontend</span>
-                                </a>
-                                <a href="https://github.com/peterwambua-1998/netflix-clone" class="retro-button"
-                                    target="_blank">
-                                    <span class="button-text">Github repo backend</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </section>
-        </main>
-
-        <footer>
-            <a href="https://github.com/peterwambua-1998" target="_blank" aria-label="GitHub">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffd52c"
-                    fill="none">
-                    <path
-                        d="M6.51734 17.1132C6.91177 17.6905 8.10883 18.9228 9.74168 19.2333M9.86428 22C8.83582 21.8306 2 19.6057 2 12.0926C2 5.06329 8.0019 2 12.0008 2C15.9996 2 22 5.06329 22 12.0926C22 19.6057 15.1642 21.8306 14.1357 22C14.1357 22 13.9267 18.5826 14.0487 17.9969C14.1706 17.4113 13.7552 16.4688 13.7552 16.4688C14.7262 16.1055 16.2043 15.5847 16.7001 14.1874C17.0848 13.1032 17.3268 11.5288 16.2508 10.0489C16.2508 10.0489 16.5318 7.65809 15.9996 7.56548C15.4675 7.47287 13.8998 8.51192 13.8998 8.51192C13.4432 8.38248 12.4243 8.13476 12.0018 8.17939C11.5792 8.13476 10.5568 8.38248 10.1002 8.51192C10.1002 8.51192 8.53249 7.47287 8.00036 7.56548C7.46823 7.65809 7.74917 10.0489 7.74917 10.0489C6.67316 11.5288 6.91516 13.1032 7.2999 14.1874C7.79575 15.5847 9.27384 16.1055 10.2448 16.4688C10.2448 16.4688 9.82944 17.4113 9.95135 17.9969C10.0733 18.5826 9.86428 22 9.86428 22Z"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </a>
-            <a href="https://www.linkedin.com/in/peter-wambua-98b388219" target="_blank" aria-label="LinkedIn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffd52c"
-                    fill="none">
-                    <path d="M7 10V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M11 13V17M11 13C11 11.3431 12.3431 10 14 10C15.6569 10 17 11.3431 17 13V17M11 13V10"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M7.00801 7L6.99902 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path
-                        d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z"
-                        stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-                </svg>
-            </a>
-        </footer>
+  <!-- Page hero -->
+  <div class="page-hero">
+    <div class="page-hero-bg">WORK</div>
+    <p class="page-label">Selected work</p>
+    <h1 class="page-title">Projects &amp;<br/><em>Builds.</em></h1>
+    <div class="page-meta">
+      <span class="page-count"><span>03</span> projects shipped</span>
     </div>
+  </div>
 
-    <script src="projects.js"></script>
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="ai">AI / ML</button>
+    <button class="filter-btn" data-filter="fullstack">Full Stack</button>
+    <button class="filter-btn" data-filter="frontend">Frontend</button>
+    <button class="filter-btn" data-filter="realtime">Real-time</button>
+  </div>
+
+  <!-- Projects grid -->
+  <div class="projects-grid" id="projectsGrid">
+
+    <!-- ── Project 1: AI Agent Builder (featured) ── -->
+    <article class="project-card featured reveal" data-categories="ai fullstack">
+      <div class="card-media" id="carousel-0">
+        <img src="./assets/agent/one.png" alt="AI Agent Builder" />
+        <button class="card-prev" data-carousel="0">‹</button>
+        <button class="card-next" data-carousel="0">›</button>
+        <div class="card-slide-indicator" id="dots-0">
+          <div class="slide-dot active"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-num">01</span>
+          <div class="card-tags">
+            <span class="card-tag featured-tag">Featured</span>
+            <span class="card-tag">AI</span>
+            <span class="card-tag">Full Stack</span>
+          </div>
+        </div>
+        <h2 class="card-title">AI AGENT BUILDER PLATFORM</h2>
+        <p class="card-desc">
+          A full-stack platform enabling users to design, configure, and deploy custom AI agents
+          for business automation — covering sales operations, lead generation, and customer support.
+          Built with a React/TypeScript frontend and NestJS monorepo backend, integrating LangGraph
+          for orchestrating multi-step agentic workflows. Supports voice/call recording, social media
+          integrations, RAG pipelines, and a visual flow builder.
+        </p>
+        <div class="card-footer">
+          <span class="card-stack">React · NestJS · LangGraph · RAG · Pg-vector · AWS S3</span>
+          <div class="card-links">
+            <a href="https://dev.kodensolutions.com/" target="_blank" class="card-link primary">Live Demo ↗</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Project 2: Collab Note App ── -->
+    <article class="project-card reveal reveal-d1" data-categories="fullstack realtime frontend">
+      <div class="card-media" id="carousel-1">
+        <img src="./assets/note-app/one.png" alt="Collaborative Note App" />
+        <button class="card-prev" data-carousel="1">‹</button>
+        <button class="card-next" data-carousel="1">›</button>
+        <div class="card-slide-indicator" id="dots-1">
+          <div class="slide-dot active"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-num">02</span>
+          <div class="card-tags">
+            <span class="card-tag">Real-time</span>
+            <span class="card-tag">Full Stack</span>
+          </div>
+        </div>
+        <h2 class="card-title">REAL-TIME COLLAB NOTE APP</h2>
+        <p class="card-desc">
+          Multiple users editing the same note simultaneously with instant sync across all clients.
+          Built with Yjs CRDT for conflict-free merging, Tiptap rich editor, and Socket.io for
+          live presence indicators and real-time updates.
+        </p>
+        <div class="card-footer">
+          <span class="card-stack">React · Yjs · Socket.io · Express</span>
+          <div class="card-links">
+            <a href="https://github.com/peterwambua-1998/note-collab-frontend" target="_blank" class="card-link">GitHub ↗</a>
+            <a href="https://frontend-note-collab.vercel.app/" target="_blank" class="card-link primary">Demo ↗</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Project 3: Netflix Clone ── -->
+    <article class="project-card reveal reveal-d2" data-categories="fullstack frontend">
+      <div class="card-media" id="carousel-2">
+        <img src="./assets/netflix/one.png" alt="Netflix Clone" />
+        <button class="card-prev" data-carousel="2">‹</button>
+        <button class="card-next" data-carousel="2">›</button>
+        <div class="card-slide-indicator" id="dots-2">
+          <div class="slide-dot active"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+          <div class="slide-dot"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-num">03</span>
+          <div class="card-tags">
+            <span class="card-tag">Frontend</span>
+            <span class="card-tag">Full Stack</span>
+          </div>
+        </div>
+        <h2 class="card-title">NETFLIX CLONE</h2>
+        <p class="card-desc">
+          Full-stack streaming platform clone. Backend serves movie and TV data via REST APIs
+          and integrates with TMDB. Frontend features browseable lists, search, and detail views
+          built with Tailwind CSS and Shadcn UI.
+        </p>
+        <div class="card-footer">
+          <span class="card-stack">React · Express · Tailwind · TMDB API</span>
+          <div class="card-links">
+            <a href="https://github.com/peterwambua-1998/netflix-clone-frontend" target="_blank" class="card-link">GitHub ↗</a>
+            <a href="https://streamflix-frontend-liart.vercel.app/" target="_blank" class="card-link primary">Demo ↗</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- Skills strip -->
+  <div class="skills-strip">
+    <div class="reveal">
+      <p class="strip-label">Under the hood</p>
+      <h2 class="strip-heading">How I<br/>build <em>things.</em></h2>
+    </div>
+    <div class="strip-right reveal reveal-d1">
+      <div class="strip-item">
+        <div class="strip-item-title">ARCHITECTURE</div>
+        <div class="strip-item-body">Monorepos, domain-driven design, clean separation of concerns. Code that survives growth.</div>
+      </div>
+      <div class="strip-item">
+        <div class="strip-item-title">AI INTEGRATION</div>
+        <div class="strip-item-body">LangChain pipelines, vector search, RAG systems, and agentic workflows with LangGraph.</div>
+      </div>
+      <div class="strip-item">
+        <div class="strip-item-title">REAL-TIME UX</div>
+        <div class="strip-item-body">WebSockets, CRDT-based collaboration, presence systems and live data flows.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA strip -->
+  <div class="cta-strip reveal">
+    <div class="cta-strip-text">
+      <h2 class="cta-strip-heading">Have a<br/><em>project?</em></h2>
+      <p class="cta-strip-sub">I'm open to collaborations, freelance work, and full-time opportunities. Let's build something great.</p>
+    </div>
+    <div class="cta-strip-actions">
+      <a href="contact.html" class="btn-primary">Get in Touch ↗</a>
+      <a href="cv-peter.pdf" target="_blank" class="btn-secondary">View Resume</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <span class="footer-copy">© 2025 Peter Wambua — All rights reserved</span>
+    <div class="footer-socials">
+      <a href="https://github.com/peterwambua-1998" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/peter-wambua-98b388219" target="_blank">LinkedIn</a>
+      <a href="mailto:pwambua25@gmail.com">Email</a>
+    </div>
+  </footer>
+
+  <script>
+    /* ── Cursor ── */
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    });
+    (function animCursor() {
+      rx += (mx - rx) * 0.14; ry += (my - ry) * 0.14;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animCursor);
+    })();
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        dot.style.width = '14px'; dot.style.height = '14px';
+        ring.style.width = '56px'; ring.style.height = '56px'; ring.style.opacity = '.3';
+      });
+      el.addEventListener('mouseleave', () => {
+        dot.style.width = '8px'; dot.style.height = '8px';
+        ring.style.width = '36px'; ring.style.height = '36px'; ring.style.opacity = '.6';
+      });
+    });
+
+    /* ── Nav scroll ── */
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+
+    /* ── Scroll reveal ── */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    /* ── Carousel system ── */
+    const carousels = {};
+
+    // images per carousel
+    const images = {
+      0: [
+        './assets/agent/one.png','./assets/agent/two.png','./assets/agent/three.png',
+        './assets/agent/four.png','./assets/agent/five.png','./assets/agent/six.png',
+        './assets/agent/seven.png','./assets/agent/eight.png','./assets/agent/nine.png'
+      ],
+      1: [
+        './assets/note-app/one.png','./assets/note-app/two.png',
+        './assets/note-app/three.png','./assets/note-app/four.png'
+      ],
+      2: [
+        './assets/netflix/one.png','./assets/netflix/two.png',
+        './assets/netflix/three.png','./assets/netflix/four.png'
+      ]
+    };
+
+    function goTo(id, idx) {
+      const c = carousels[id];
+      c.current = (idx + images[id].length) % images[id].length;
+      const mediaEl = document.getElementById('carousel-' + id);
+      mediaEl.querySelector('img').src = images[id][c.current];
+      // update dots
+      const dotsEl = document.getElementById('dots-' + id);
+      dotsEl.querySelectorAll('.slide-dot').forEach((d, i) => d.classList.toggle('active', i === c.current));
+    }
+
+    Object.keys(images).forEach(id => {
+      carousels[id] = { current: 0 };
+    });
+
+    document.querySelectorAll('.card-prev, .card-next').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const id = btn.dataset.carousel;
+        const dir = btn.classList.contains('card-next') ? 1 : -1;
+        goTo(id, carousels[id].current + dir);
+      });
+    });
+
+    // dot clicks
+    document.querySelectorAll('.card-slide-indicator').forEach(wrap => {
+      const id = wrap.id.replace('dots-', '');
+      wrap.querySelectorAll('.slide-dot').forEach((dot, i) => {
+        dot.addEventListener('click', e => { e.stopPropagation(); goTo(id, i); });
+      });
+    });
+
+    /* ── Filter system ── */
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.project-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+
+        cards.forEach(card => {
+          const cats = card.dataset.categories || '';
+          const show = filter === 'all' || cats.includes(filter);
+          card.setAttribute('data-hidden', show ? 'false' : 'true');
+        });
+      });
+    });
+  </script>
 </body>
-
 </html>
