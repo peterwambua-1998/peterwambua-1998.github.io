@@ -9,6 +9,84 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <style>
+        /* ── Responsive overrides for projects.html ── */
+
+        /* Header: wrap nav on small screens */
+        header {
+            flex-wrap: wrap;
+            padding: 0.5rem;
+        }
+
+        nav ul {
+            flex-wrap: wrap;
+            gap: clamp(0.75rem, 3vw, 40px);
+        }
+
+        /* Section heading inside main */
+        #projects-screen>header {
+            border: none;
+            margin-bottom: 1rem;
+        }
+
+        #projects-screen>header h2 {
+            font-size: clamp(1rem, 3.5vw, 1.6rem);
+            white-space: normal;
+            /* allow wrapping on very small screens */
+            word-break: break-word;
+        }
+
+        /* Carousel: taller on mobile for better visibility */
+        .carousel-slide {
+            height: clamp(200px, 45vw, 350px);
+        }
+
+        @media (min-width: 768px) {
+            header {
+                padding: 0.5rem 1rem;
+            }
+
+            .carousel-slide {
+                height: 450px;
+            }
+        }
+
+        /* Project tags: already flex-wrap in style.css — just ensure font scales */
+        .tag {
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+        }
+
+        /* Project title */
+        .project-title {
+            font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+        }
+
+        /* Feature & tech headings */
+        .feature-heading,
+        .tech-heading {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+        }
+
+        /* Description text */
+        .project-description p,
+        .feature-list li,
+        .tech-stack {
+            font-size: clamp(0.95rem, 2vw, 1.15rem);
+        }
+
+        /* Project links: ensure buttons don't overflow */
+        .project-links {
+            flex-wrap: wrap;
+        }
+
+        /* Carousel nav buttons: easier to tap on mobile */
+        .carousel-prev,
+        .carousel-next {
+            padding: 0.4rem 0.8rem;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+    </style>
 </head>
 
 <body>
@@ -24,57 +102,53 @@
                 </ul>
             </nav>
         </header>
+
+        <main>
             <section id="projects-screen">
                 <header>
                     <h2>> SYSTEM.EXECUTE(PROJECTS.EXE)_</h2>
                 </header>
-                
+
                 <!-- AI Chatbot Builder Project -->
                 <article class="project-card">
                     <div class="project-header">
-                        <h3 class="project-title">AI CHATBOT BUILDER</h3>
+                        <h3 class="project-title">AI Agent Builder Platform | React (TypeScript) · NestJS · LangGraph
+                        </h3>
                         <div class="project-tags">
                             <span class="tag">REACT</span>
                             <span class="tag">REACT FLOW</span>
                             <span class="tag">LANGCHAIN</span>
                             <span class="tag">RAG</span>
+                            <span class="tag">NODE.JS</span>
+                            <span class="tag">AWS S3</span>
+                            <span class="tag">POSTGRES (vector extension for storing embeddings)</span>
+                            <span class="tag">Passport for authentication</span>
+                            <span class="tag">Stripe , Paystack and PayPal</span>
                         </div>
                     </div>
-                    
+
                     <div class="project-content">
-                        <!-- Carousel now at the top, full width -->
-                         
                         <div class="project-carousel">
                             <div class="carousel-container">
                                 <div class="carousel-track">
-                                    <!-- Replace with actual project images -->
-                                    <div class="carousel-slide">
-                                        <img src="./assets/bot-1.png" alt="AI Chatbot Builder Dashboard">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/bot-2.png" alt="AI Chatbot Builder Dashboard">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/bot-3.png" alt="AI Chatbot Builder Dashboard">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/bot-4.png" alt="AI Chatbot Builder Dashboard">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/bot-5.png" alt="AI Chatbot Builder Dashboard">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/bot-6.png" alt="AI Chatbot Builder Dashboard">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/bot-7.png" alt="AI Chatbot Builder Dashboard">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/bot-8.png" alt="AI Chatbot Builder Dashboard">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/bot-9.png" alt="AI Chatbot Builder Dashboard">
-                                    </div>
+                                    <div class="carousel-slide"><img src="./assets/agent/one.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/agent/two.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/agent/three.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/agent/four.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/agent/five.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/agent/six.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/agent/seven.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/agent/eight.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/agent/nine.png"
+                                            alt="AI Agent Builder Dashboard"></div>
                                 </div>
                                 <div class="carousel-nav">
                                     <button class="carousel-prev">◀</button>
@@ -93,74 +167,73 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Project info below carousel -->
+
                         <div class="project-info">
                             <div class="project-description">
                                 <p>
-                                    A no-code AI chatbot builder platform where users can configure intelligent conversation flows using a visual interface powered by React Flow. 
-                                    The project is still in development phase. <br>
-                                    This project really tested my programming skills especially in data structures and algorithms. I also learned new technologies like ffmpeg to convert files, useful for converting audio files to wav that iis best suited for googles speech to text.
+                                    A full-stack platform that enables users to design, configure, and deploy custom AI
+                                    agents for business automation tasks including sales operations, lead generation,
+                                    and customer support.
+
+                                    Built a React/TypeScript frontend with a NestJS backend structured as a monorepo,
+                                    integrating LangGraph for orchestrating multi-step agentic workflows.
+                                    The system supports voice/call recording capabilities and social media interactions,
+                                    with a modular architecture that allows agents to be composed and extended for
+                                    diverse use cases.
+
                                 </p>
-                                
+
                                 <h4 class="feature-heading">KEY FEATURES:</h4>
                                 <ul class="feature-list">
                                     <li>Visual flow builder for creating complex conversation paths</li>
                                     <li>AI RAG (Retrieval Augmented Generation) capability</li>
-                                    <li>Knowledge base integration via document upload, direct text input, or website crawling</li>
+                                    <li>Knowledge base integration via document upload, direct text input, or website
+                                        crawling</li>
                                     <li>Image processing and recognition</li>
                                     <li>Embeddable widget for easy website integration</li>
-                                    <li>Integrate bot with whatsapp, instagram and facebook</li>
+                                    <li>Integrate bot with WhatsApp, Instagram and Facebook</li>
                                     <li>Conversation management</li>
                                 </ul>
-                                
+
                                 <h4 class="tech-heading">TECH STACK:</h4>
-                                <p class="tech-stack">React, React Flow, Node.js, Langchain, Postgres, Pg-vector, AWS S3</p>
+                                <p class="tech-stack">React, React Flow, Node.js, Langchain, Postgres, Pg-vector, AWS S3
+                                </p>
                             </div>
-                            
+
                             <div class="project-links">
-                                <a href="https://chatbot.kodensolutions.com/" class="retro-button">
+                                <a href="https://dev.kodensolutions.com/" class="retro-button" target="_blank">
                                     <span class="button-text">LIVE DEMO</span>
                                 </a>
-                                <!-- <a href="https://github.com/peterwambua-1998/chatbot-builder" class="retro-button">
-                                    <span class="button-text">SOURCE CODE</span>
-                                </a> -->
                             </div>
                         </div>
                     </div>
                 </article>
-                
-                <!-- Resume Builder Project -->
+
                 <article class="project-card">
                     <div class="project-header">
-                        <h3 class="project-title">RESUME BUILDER</h3>
+                        <h3 class="project-title">Real-Time Collaborative Note App</h3>
                         <div class="project-tags">
-                            <span class="tag">NEXT.JS</span>
-                            <span class="tag">FIREBASE</span>
+                            <span class="tag">REACT</span>
+                            <span class="tag">Yjs (CRDT)</span>
+                            <span class="tag">Tiptap rich editor</span>
+                            <span class="tag">Socket.io for real-time sync</span>
+                            <span class="tag">Express JS</span>
                         </div>
                     </div>
-                    
+
                     <div class="project-content">
-                        <!-- Carousel now at the top, full width -->
                         <div class="project-carousel">
                             <div class="carousel-container">
                                 <div class="carousel-track">
-                                    <!-- Replace with actual project images -->
-                                    <div class="carousel-slide">
-                                        <img src="./assets/resume-1.png" alt="Resume Builder Dashboard">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/resume-2.png" alt="Template Selection">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/resume-3.png" alt="Template Selection">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/resume-4.png" alt="Template Selection">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/resume-5.png" alt="Template Selection">
-                                    </div>
+                                    <div class="carousel-slide"><img src="./assets/note-app/one.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/note-app/two.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/note-app/three.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/note-app/four.png"
+                                            alt="AI Agent Builder Dashboard"></div>
+
                                 </div>
                                 <div class="carousel-nav">
                                     <button class="carousel-prev">◀</button>
@@ -169,67 +242,76 @@
                                         <button class="indicator" data-index="1"></button>
                                         <button class="indicator" data-index="2"></button>
                                         <button class="indicator" data-index="3"></button>
+
                                     </div>
                                     <button class="carousel-next">▶</button>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Project info below carousel -->
+
                         <div class="project-info">
                             <div class="project-description">
-                                <p>A modern resume builder application that allows users to create professional resumes and multiple template options.</p>
-                                
+                                <p>
+                                    A real-time collaborative note-taking web application where multiple users can edit
+                                    the same note simultaneously with instant updates across clients. It demonstrates
+                                    modern frontend and backend engineering skills, real-time communication, and
+                                    collaborative UI features.
+
+                                </p>
+
                                 <h4 class="feature-heading">KEY FEATURES:</h4>
                                 <ul class="feature-list">
-                                    <li>Multiple professional resume templates</li>
-                                    <li>Real-time preview and editing</li>
-                                    <li>PDF export functionality</li>
-                                    <li>Save and edit drafts</li>
+                                    <li>real-time collaborative editing</li>
+                                    <li>instant synchronization across clients</li>
+                                    <li>user presence indicators</li>
+                                    <li>conflict resolution mechanisms</li>
                                 </ul>
-                                
+
                                 <h4 class="tech-heading">TECH STACK:</h4>
-                                <p class="tech-stack">Next.js, Firebase</p>
+                                <p class="tech-stack">React with TypeScript, Vite, Yjs (CRDT), Socket.io, Node js,
+                                    Express Js, Vercel</p>
                             </div>
-                            
+
                             <div class="project-links">
-                                <a href="https://ai-app-49d1e.firebaseapp.com/" class="retro-button">
+                                <a href="https://frontend-note-collab.vercel.app/" class="retro-button" target="_blank">
                                     <span class="button-text">LIVE DEMO</span>
                                 </a>
-                                <a href="https://github.com/peterwambua-1998/resumer-builder" class="retro-button">
-                                    <span class="button-text">SOURCE CODE</span>
+                                <a href="https://github.com/peterwambua-1998/note-collab-frontend" class="retro-button"
+                                    target="_blank">
+                                    <span class="button-text">Github repo frontend</span>
+                                </a>
+                                <a href="https://github.com/peterwambua-1998/note-collab-backend" class="retro-button"
+                                    target="_blank">
+                                    <span class="button-text">Github repo backend</span>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </article>
-                
-                <!-- projtrac -->
+
                 <article class="project-card">
                     <div class="project-header">
-                        <h3 class="project-title">PROJTRAC SYSTEMS LIMITED WEBSITE DEVELOPMENT</h3>
+                        <h3 class="project-title">Netflix Clone Web App</h3>
                         <div class="project-tags">
-                            <span class="tag">WORDPRESS</span>
-                            <span class="tag">ELEMENTOR</span>
+                            <span class="tag">REACT</span>
+                            <span class="tag">TMDB API</span>
+                            <span class="tag">Express JS</span>
                         </div>
                     </div>
-                    
+
                     <div class="project-content">
-                        <!-- Carousel now at the top, full width -->
                         <div class="project-carousel">
                             <div class="carousel-container">
                                 <div class="carousel-track">
-                                    <!-- Replace with actual project images -->
-                                    <div class="carousel-slide">
-                                        <img src="./assets/proj-1.png" alt="Resume Builder Dashboard">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/proj-2.png" alt="Template Selection">
-                                    </div>
-                                    <div class="carousel-slide">
-                                        <img src="./assets/proj-3.png" alt="Template Selection">
-                                    </div>
-                                    
+                                    <div class="carousel-slide"><img src="./assets/netflix/one.png"
+                                            alt="Netflix Clone Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/netflix/two.png"
+                                            alt="Netflix Clone Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/netflix/three.png"
+                                            alt="Netflix Clone   Dashboard"></div>
+                                    <div class="carousel-slide"><img src="./assets/netflix/four.png"
+                                            alt="Netflix Clone Dashboard"></div>
+
                                 </div>
                                 <div class="carousel-nav">
                                     <button class="carousel-prev">◀</button>
@@ -237,57 +319,71 @@
                                         <button class="indicator active" data-index="0"></button>
                                         <button class="indicator" data-index="1"></button>
                                         <button class="indicator" data-index="2"></button>
+                                        <button class="indicator" data-index="3"></button>
+
                                     </div>
                                     <button class="carousel-next">▶</button>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Project info below carousel -->
+
                         <div class="project-info">
                             <div class="project-description">
-                                <p>Designed a fully functional website to showcase what Projtrac Systems Limited offer and a way to contact them for their service. I had never used wordpress before so this was an awesome challange</p>
-                                
-                                <h4 class="feature-heading">KEY FEATURES:</h4>
-                                <ul class="feature-list">
-                                    <li>Landing page with a nice hero section</li>
-                                    <li>About section</li>
-                                    <li>Blog post page to showcase blogs</li>
-                                    <li>Contact page with working contact form</li>
-                                    <li>Responsive on all devices</li>
-                                </ul>
-                                
+                                <p>
+                                   A full-stack streaming platform clone inspired by Netflix. The backend serves movie and TV show data through REST APIs, interacts with TMDB (The Movie Database) for media content, and the frontend displays browseable lists, search, and details using a Tailwind CSS.
+
+
+                                </p>
+
+
                                 <h4 class="tech-heading">TECH STACK:</h4>
-                                <p class="tech-stack">Wordpress</p>
+                                <p class="tech-stack">React with TypeScript, Vite, Tailwind CSS, Node js,
+                                    Express Js, Shadcn UI, TMDB API</p>
                             </div>
-                            
+
                             <div class="project-links">
-                                <a href="https://projtrac.co.ke/" class="retro-button">
-                                    <span class="button-text">LIVE SITE</span>
+                                <a href="https://streamflix-frontend-liart.vercel.app/" class="retro-button" target="_blank">
+                                    <span class="button-text">LIVE DEMO</span>
                                 </a>
-                                
+                                <a href="https://github.com/peterwambua-1998/netflix-clone-frontend" class="retro-button"
+                                    target="_blank">
+                                    <span class="button-text">Github repo frontend</span>
+                                </a>
+                                <a href="https://github.com/peterwambua-1998/netflix-clone" class="retro-button"
+                                    target="_blank">
+                                    <span class="button-text">Github repo backend</span>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </article>
-
-                <footer>
-                    <a href="https://github.com/peterwambua-1998" target="_blank">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffd52c" fill="none">
-                            <path d="M6.51734 17.1132C6.91177 17.6905 8.10883 18.9228 9.74168 19.2333M9.86428 22C8.83582 21.8306 2 19.6057 2 12.0926C2 5.06329 8.0019 2 12.0008 2C15.9996 2 22 5.06329 22 12.0926C22 19.6057 15.1642 21.8306 14.1357 22C14.1357 22 13.9267 18.5826 14.0487 17.9969C14.1706 17.4113 13.7552 16.4688 13.7552 16.4688C14.7262 16.1055 16.2043 15.5847 16.7001 14.1874C17.0848 13.1032 17.3268 11.5288 16.2508 10.0489C16.2508 10.0489 16.5318 7.65809 15.9996 7.56548C15.4675 7.47287 13.8998 8.51192 13.8998 8.51192C13.4432 8.38248 12.4243 8.13476 12.0018 8.17939C11.5792 8.13476 10.5568 8.38248 10.1002 8.51192C10.1002 8.51192 8.53249 7.47287 8.00036 7.56548C7.46823 7.65809 7.74917 10.0489 7.74917 10.0489C6.67316 11.5288 6.91516 13.1032 7.2999 14.1874C7.79575 15.5847 9.27384 16.1055 10.2448 16.4688C10.2448 16.4688 9.82944 17.4113 9.95135 17.9969C10.0733 18.5826 9.86428 22 9.86428 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                    <a href="https://www.linkedin.com/in/peter-wambua-98b388219" target="_blank">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffd52c" fill="none">
-                            <path d="M7 10V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M11 13V17M11 13C11 11.3431 12.3431 10 14 10C15.6569 10 17 11.3431 17 13V17M11 13V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M7.00801 7L6.99902 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                </footer>
             </section>
-       
+        </main>
+
+        <footer>
+            <a href="https://github.com/peterwambua-1998" target="_blank" aria-label="GitHub">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffd52c"
+                    fill="none">
+                    <path
+                        d="M6.51734 17.1132C6.91177 17.6905 8.10883 18.9228 9.74168 19.2333M9.86428 22C8.83582 21.8306 2 19.6057 2 12.0926C2 5.06329 8.0019 2 12.0008 2C15.9996 2 22 5.06329 22 12.0926C22 19.6057 15.1642 21.8306 14.1357 22C14.1357 22 13.9267 18.5826 14.0487 17.9969C14.1706 17.4113 13.7552 16.4688 13.7552 16.4688C14.7262 16.1055 16.2043 15.5847 16.7001 14.1874C17.0848 13.1032 17.3268 11.5288 16.2508 10.0489C16.2508 10.0489 16.5318 7.65809 15.9996 7.56548C15.4675 7.47287 13.8998 8.51192 13.8998 8.51192C13.4432 8.38248 12.4243 8.13476 12.0018 8.17939C11.5792 8.13476 10.5568 8.38248 10.1002 8.51192C10.1002 8.51192 8.53249 7.47287 8.00036 7.56548C7.46823 7.65809 7.74917 10.0489 7.74917 10.0489C6.67316 11.5288 6.91516 13.1032 7.2999 14.1874C7.79575 15.5847 9.27384 16.1055 10.2448 16.4688C10.2448 16.4688 9.82944 17.4113 9.95135 17.9969C10.0733 18.5826 9.86428 22 9.86428 22Z"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/peter-wambua-98b388219" target="_blank" aria-label="LinkedIn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffd52c"
+                    fill="none">
+                    <path d="M7 10V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M11 13V17M11 13C11 11.3431 12.3431 10 14 10C15.6569 10 17 11.3431 17 13V17M11 13V10"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M7.00801 7L6.99902 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path
+                        d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z"
+                        stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                </svg>
+            </a>
+        </footer>
     </div>
 
     <script src="projects.js"></script>

@@ -18,17 +18,19 @@
 body {
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* FIX: was align-items: center + height: 100vh which cut off content on mobile */
+    align-items: flex-start;
     min-height: 100vh;
-    height: 100%;
     background-color: var(--background-color);
-    cursor: url('./assets/mouse.svg');
-    overflow-x: hidden;
+    cursor: url('./assets/mouse.svg'), auto;
+    padding: 1rem;
 }
 
 div.retro-container {
     width: 100%;
-    height: 100vh;
+    max-width: 1200px;
+    /* FIX: was height: 90vh which clipped content on small screens */
+    min-height: 90vh;
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: hidden;
@@ -42,13 +44,8 @@ div.retro-container {
 
 nav ul {
     display: flex;
-    flex-wrap: wrap;
-    gap: clamp(0.5rem, 3vw, 2.5rem);
-    justify-content: flex-end;
-}
-
-nav li {
-    list-style: none;
+    flex-wrap: wrap;          /* FIX: allow nav links to wrap on small screens */
+    gap: clamp(0.5rem, 3vw, 40px);
 }
 
 nav a {
@@ -87,7 +84,8 @@ nav a:hover {
 header,
 footer {
     display: flex;
-    gap: clamp(0.5rem, 3vw, 2rem);
+    flex-wrap: wrap;          /* FIX: allow wrapping on small screens */
+    gap: 2rem;
     align-items: center;
     flex-wrap: wrap;
     justify-content: center;
@@ -135,33 +133,21 @@ section h2 {
     word-wrap: break-word;
 }
 
+/* ── Screen 1 (Home) ── */
 #screen-1 article {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.5rem;
-    overflow-y: auto;
+    flex-direction: column;   /* FIX: mobile-first stacking */
+    gap: 2%;
 }
 
 #screen-1 article div {
-    padding-right: 0;
-    width: 100%;
-}
-
-figure {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 1rem 0;
+    padding-right: 0;         /* FIX: no right-padding on mobile */
 }
 
 figure img {
-    width: 80%;
-    max-width: 300px;
-    height: auto;
-    aspect-ratio: 1/1;
+    /* FIX: was width: 150vw which overflowed on mobile */
+    width: clamp(140px, 60vw, 200px);
+    height: clamp(160px, 45vw, 280px);
     object-fit: cover;
     opacity: .7;
     border: 4px solid var(--primary-color);
@@ -185,32 +171,32 @@ footer {
     }
 }
 
+/* ── Desktop layout (768px+) ── */
 @media (min-width: 768px) {
+    body {
+        align-items: center;
+        padding: 0;
+    }
+
+    div.retro-container {
+        width: 90vw;
+        height: 90vh;
+        min-height: unset;
+    }
+
     #screen-1 article {
         flex-direction: row;
+        justify-content: space-between;
         align-items: flex-start;
     }
 
     #screen-1 article div {
-        padding-right: 2rem;
-        width: 65%;
-    }
-    
-    figure {
-        width: 35%;
+        padding-right: 40px;
     }
 
     figure img {
-        width: 100%;
-        max-width: 250px;
-        height: auto;
-        margin-bottom: 0;
-    }
-}
-
-@media (min-width: 992px) {
-    figure img {
-        max-width: 300px;
+        width: 18vw;
+        height: 40vh;
     }
 }
 
@@ -296,7 +282,7 @@ svg:hover {
     }
 }
 
-/* New styles for buttons and contact page */
+/* Buttons */
 .cta-buttons {
     display: flex;
     gap: 1rem;
@@ -344,7 +330,7 @@ svg:hover {
     z-index: 1;
 }
 
-/* Contact page styles */
+/* Contact page */
 #contact-screen {
     padding: 0.5rem;
     width: 100%;
@@ -436,32 +422,16 @@ textarea.retro-input {
     box-shadow: 0 0 0.5rem var(--primary-color);
 }
 
-.contact-form .retro-button {
-    margin-top: 0.5rem;
-    min-width: 120px;
-}
-
-/* Media queries for contact page */
-@media (min-width: 576px) {
-    .contact-form .retro-button {
-        min-width: 150px;
-    }
-}
-
 @media (min-width: 768px) {
     .contact-content {
         flex-direction: row;
     }
-    
-    .contact-card, 
+
+    .contact-card,
     .contact-form {
         width: 50%;
     }
-    
-    .contact-card {
-        margin-right: 1rem;
-    }
-    
+
     .contact-item {
         flex-direction: row;
         align-items: center;
@@ -489,7 +459,7 @@ textarea.retro-input {
     }
 }
 
-
+/* Certifications page */
 #certifications-screen {
     padding: 0.5rem;
     width: 100%;
@@ -560,28 +530,21 @@ textarea.retro-input {
     flex-wrap: wrap;
 }
 
-/* Media queries for certifications page */
-@media (min-width: 576px) {
-    .cert-preview img {
-        max-width: 90%;
-    }
-}
-
 @media (min-width: 768px) {
     .cert-details {
         flex-direction: row;
         align-items: center;
     }
-    
+
     .cert-info {
         width: 40%;
         padding-right: 1rem;
     }
-    
+
     .cert-preview {
         width: 60%;
     }
-    
+
     .cert-preview img {
         max-height: 50vh;
         max-width: 100%;
@@ -602,7 +565,7 @@ textarea.retro-input {
     }
 }
 
-/* Projects page styles */
+/* Projects page */
 #projects-screen {
     padding: 0.5rem;
     overflow-y: auto;
@@ -670,7 +633,7 @@ textarea.retro-input {
 
 .carousel-slide {
     min-width: 100%;
-    height: clamp(200px, 50vw, 350px);
+    height: 350px;
 }
 
 .carousel-slide img {
@@ -782,40 +745,13 @@ textarea.retro-input {
     justify-content: center;
 }
 
-/* Media queries for projects page */
-@media (min-width: 576px) {
-    .carousel-slide {
-        height: clamp(250px, 45vw, 350px);
-    }
-    
-    .indicator {
-        width: 10px;
-        height: 10px;
-    }
-}
-
 @media (min-width: 768px) {
-    .carousel-slide {
-        height: clamp(300px, 40vw, 450px);
-    }
-    
-    .project-links {
-        justify-content: flex-start;
-    }
-}
-
-@media (min-width: 992px) {
     .carousel-slide {
         height: 450px;
     }
-    
-    .project-description,
-    .feature-list li,
-    .tech-stack {
-        font-size: 1.1rem;
-    }
 }
 
+/* Glitch & scan transition effects */
 .glitch-transition {
     animation: glitch-anim 0.3s ease;
 }
